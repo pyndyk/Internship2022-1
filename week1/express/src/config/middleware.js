@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 
+console.log(' M 1 1 ');
 module.exports = {
     init(app) {
         /**
