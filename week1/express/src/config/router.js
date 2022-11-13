@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 
-console.log(' M 1 2 ');
+
 // ROUTERS
 const DemoRouter = require('../components/Users/router');
 
