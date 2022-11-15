@@ -1,3 +1,5 @@
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable eqeqeq */
 /* eslint-disable eol-last */
 const users = [];
 
@@ -50,7 +52,9 @@ function putUser(str) {
 function deleteUser(str) {
     try {
         if (str.user) {
-            users.splice(users.indexOf(str.user), 1);
+            if (users.indexOf(str.user) != -1) {
+                users.splice(users.indexOf(str.user), 1);
+            }
 
             return users;
         }
