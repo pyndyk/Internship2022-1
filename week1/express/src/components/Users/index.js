@@ -1,8 +1,9 @@
-const DemoService = require('./service');
+/* eslint-disable eol-last */
+const myService = require('./service');
 
 async function findAll(req, res) {
     try {
-        const demo = await DemoService.findAll();
+        const demo = await myService.findAll();
 
         return res.status(200).json({
             data: demo,
@@ -17,7 +18,7 @@ async function findAll(req, res) {
 
 async function create(req, res) {
     try {
-        const demo = await DemoService.create(req.body);
+        const demo = await myService.create(req.body);
 
         return res.status(201).json({
             data: demo,
@@ -31,7 +32,7 @@ async function create(req, res) {
 }
 async function putUser(req, res) {
     try {
-        const demo = await DemoService.putUser(req.body);
+        const demo = await myService.putUser(req.body);
 
         return res.status(201).json({
             data: demo,
@@ -45,7 +46,7 @@ async function putUser(req, res) {
 }
 async function deleteUser(req, res) {
     try {
-        const demo = await DemoService.deleteUser(req.body);
+        const demo = await myService.deleteUser(req.body);
 
         return res.status(201).json({
             data: demo,

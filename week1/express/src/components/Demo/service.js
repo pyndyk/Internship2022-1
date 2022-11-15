@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 function findAll() {
     return [];
 }

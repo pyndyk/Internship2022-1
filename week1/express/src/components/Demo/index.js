@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const DemoService = require('./service');
 
 async function findAll(req, res) {

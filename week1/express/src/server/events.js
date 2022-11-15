@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 function onListening() {
     const address = this.address();
 

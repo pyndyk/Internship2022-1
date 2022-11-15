@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const express = require('express');
 
 const middleware = require('../config/middleware');

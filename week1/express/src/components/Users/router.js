@@ -1,12 +1,13 @@
+/* eslint-disable eol-last */
 const { Router } = require('express');
-const DemoComponent = require('./index');
+const myComponent = require('./index');
 
 const router = Router();
 
-router.get('/', DemoComponent.findAll);
+router.get('/', myComponent.findAll);
 
-router.post('/', DemoComponent.create);
-router.put('/', DemoComponent.putUser);
-router.delete('/', DemoComponent.deleteUser);
+router.post('/', myComponent.create);
+router.put('/', myComponent.putUser);
+router.delete('/', myComponent.deleteUser);
 
 module.exports = router;
