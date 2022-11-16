@@ -1,18 +1,11 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable eqeqeq */
 /* eslint-disable eol-last */
 const users = [];
 
 function findAll() {
-    try {
-        if (users) {
-            return users;
-        }
-
-        return users;
-    } catch (e) {
-        return console.log(e);
-    }
+    return users;
 }
 
 /**
@@ -20,49 +13,36 @@ function findAll() {
  *  we will do manipulations here
  */
 function create(str) {
-    try {
-        if (str) {
-            users.push(str.user);
-
-            return users;
-        }
-
-        return [];
-    } catch (e) {
-        return console.log(e);
-    }
-}
-
-function putUser(str) {
-    try {
-        if (str.user) {
-            const index = users.indexOf(str.user);
-
-            users[index] = str.new_user;
-
-            return users;
-        }
+    if (str) {
+        users.push(str);
 
         return users;
-    } catch (e) {
-        return console.log(e);
     }
+
+    return [];
+}
+
+function putUser(str, idUser) {
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id == idUser) {
+            users[i] = str;
+
+            return users;
+        }
+    }
+
+    return users;
 }
 
 function deleteUser(str) {
-    try {
-        if (str.user) {
-            if (users.indexOf(str.user) != -1) {
-                users.splice(users.indexOf(str.user), 1);
-            }
-
-            return users;
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id == str) {
+            users.splice(i, 1);
+            break;
         }
-
-        return users;
-    } catch (e) {
-        return console.log(e);
     }
+
+    return users;
 }
 module.exports = {
     create,
