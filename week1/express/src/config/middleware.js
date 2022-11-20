@@ -1,12 +1,13 @@
-/* eslint-disable eol-last */
-/* eslint-disable operator-linebreak */
 const bodyParser = require('body-parser');
+
+const morgan = require('morgan');
 
 module.exports = {
     init(app) {
         /**
          * BODY PARSER
          */
+        app.use(morgan('tiny'));
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json());
 

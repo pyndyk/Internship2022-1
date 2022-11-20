@@ -1,14 +1,13 @@
 /* eslint-disable consistent-return */
 const { Router } = require('express');
 
+const myToken = require('./middleware');
+
 const myComponent = require('./index');
 
 const router = Router();
 
-router.get('/', myComponent.findAll);
-
-router.post('/', myComponent.create);
-router.put('/', myComponent.putUser);
-router.delete('/', myComponent.deleteUser);
+router.post('/', myComponent.getToken);
+router.post('/account', myToken.authenticateToken, myComponent.getToken);
 
 module.exports = router;
