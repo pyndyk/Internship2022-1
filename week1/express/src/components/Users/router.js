@@ -3,12 +3,14 @@ const { Router } = require('express');
 
 const myComponent = require('./index');
 
+const middelware = require('./middleware');
+
 const router = Router();
 
-router.get('/', myComponent.findAll);
+router.get('/user', myComponent.findUser);
 
-router.post('/', myComponent.create);
-router.put('/', myComponent.putUser);
-router.delete('/', myComponent.deleteUser);
+router.post('/addUser', middelware.validationReqBody, myComponent.create);
+router.put('/putUser', middelware.validationReqBodyAndQuery, myComponent.putUser);
+router.delete('/deleteUser', middelware.validationQuery, myComponent.deleteUser);
 
 module.exports = router;

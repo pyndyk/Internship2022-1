@@ -2,15 +2,17 @@ const url = require('url');
 
 const myService = require('./service');
 
-const blogPostSchema = require('./middleware');
-
-async function findAll(req, res) {
+async function findUser(req, res) {
     try {
-        const demo = await myService.findAll();
+        const demo = await myService.findUser(req.query);
 
-        return res.status(200).json({
-            data: demo,
-        });
+        if (demo !== 'not found user') {
+            return res.status(200).json({
+                data: demo,
+            });
+        }
+
+        return 'error';
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -21,19 +23,15 @@ async function findAll(req, res) {
 
 async function create(req, res) {
     try {
-        const result = blogPostSchema.schema.validate(req.body);
-        const { error } = result;
-        const valid = error == null;
+        const demo = await myService.create(req.body);
 
-        if (valid) {
-            const demo = await myService.create(req.body);
-
+        if (demo !== 'error') {
             return res.status(201).json({
                 data: demo,
             });
         }
 
-        return res.status(400).send(error.details[0].message);
+        return res.status(404).send('error');
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -44,20 +42,15 @@ async function create(req, res) {
 async function putUser(req, res) {
     try {
         const queryObject = url.parse(req.url, true).query;
-        const result = blogPostSchema.schema.validate(req.body);
-        const result2 = blogPostSchema.schemaQuery.validate(queryObject);
-        const { error } = (result || result2);
-        const valid = error == null;
+        const demo = await myService.putUser(req.body, queryObject.name);
 
-        if (valid) {
-            const demo = await myService.putUser(req.body, queryObject.id);
-
+        if (demo) {
             return res.status(201).json({
                 data: demo,
             });
         }
 
-        return res.status(400).send(error.details[0].message);
+        return 'user not found';
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -68,19 +61,11 @@ async function putUser(req, res) {
 async function deleteUser(req, res) {
     try {
         const queryObject = url.parse(req.url, true).query;
-        const result = blogPostSchema.schemaQuery.validate(queryObject);
-        const { error } = result;
-        const valid = error == null;
+        const demo = await myService.deleteUser(queryObject.name);
 
-        if (valid) {
-            const demo = await myService.deleteUser(queryObject.id);
-
-            return res.status(201).json({
-                data: demo,
-            });
-        }
-
-        return res.status(400).send(error.details[0].message);
+        return res.status(201).json({
+            data: demo,
+        });
     } catch (error) {
         return res.status(500).json({
             error: error.message,
@@ -99,7 +84,7 @@ async function getToken(req, res) {
 }
 
 module.exports = {
-    findAll,
+    findUser,
     create,
     putUser,
     deleteUser,
