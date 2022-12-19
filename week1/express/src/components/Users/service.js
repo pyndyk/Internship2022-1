@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
@@ -7,13 +8,11 @@ dotenv.config();
 
 async function create(req) {
     try {
-        const salt = await bcrypt.genSalt(10);
-
         Users.create({
             email: req.email,
-            'first-name': req['first-name'],
-            'second-name': req['second-name'],
-            password: await bcrypt.hash(req.password, salt),
+            firstName: req.firstName,
+            lastName: req.lastName,
+            password: req.password,
         });
 
         return 'true';
@@ -35,12 +34,12 @@ async function getToken(line) {
 }
 
 async function putUser(user, name) {
-    const userPut = await Users.findOne({ 'first-name': name });
+    const userPut = await Users.findOne({ firstName: name });
 
     if (userPut.email) {
         userPut.email = user.email;
-        userPut['first-name'] = user['first-name'];
-        userPut['second-name'] = user['second-name'];
+        userPut.firstName = user.firstName;
+        userPut.lastName = user.lastName;
         userPut.password = user.password;
         await userPut.save();
 
@@ -51,7 +50,7 @@ async function putUser(user, name) {
 }
 async function findUser(queryParam) {
     const user = await Users.find({
-        'first-name': queryParam.name,
+        firstName: queryParam.name,
     });
 
     const validPassword = await bcrypt.compare(queryParam.password, user[0].password);
@@ -64,7 +63,7 @@ async function findUser(queryParam) {
 }
 
 async function deleteUser(name) {
-    const user = await Users.deleteOne({ 'first-name': name });
+    const user = await Users.deleteOne({ firstName: name });
 
     if (user) return 'ok';
 

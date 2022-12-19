@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const url = require('url');
 
 const Joi = require('joi');
@@ -6,8 +7,8 @@ const jwt = require('jsonwebtoken');
 
 const schema = Joi.object().keys({
     email: Joi.string(),
-    'first-name': Joi.string(),
-    'second-name': Joi.string(),
+    firstName: Joi.string(),
+    lastName: Joi.string(),
     password: Joi.string(),
 });
 const schemaQuery = Joi.object().keys({
@@ -15,10 +16,12 @@ const schemaQuery = Joi.object().keys({
 });
 
 function validationReqBody(req, res, next) {
+    console.log('P 1');
     const result = schema.validate(req.body);
     const { error } = result;
     const valid = error == null;
 
+    console.log(valid);
     if (valid) return next();
 
     return res.status(400).send(error.details[0].message);
@@ -59,6 +62,8 @@ function authenticateToken(req, res, next) {
         if (err) return res.sendStatus(403);
 
         req.user = user;
+
+        return undefined;
     });
 
     return next();
