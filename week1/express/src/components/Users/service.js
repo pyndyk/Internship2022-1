@@ -8,7 +8,7 @@ dotenv.config();
 
 async function create(req) {
     try {
-        Users.create({
+        await Users.create({
             email: req.email,
             firstName: req.firstName,
             lastName: req.lastName,

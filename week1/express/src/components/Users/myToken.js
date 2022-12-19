@@ -1,4 +1,4 @@
-/* eslint-disable consistent-return */
+/* eslint-disable eol-last */
 const { Router } = require('express');
 
 const myToken = require('./middleware');

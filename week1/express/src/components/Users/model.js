@@ -11,9 +11,18 @@ const schemaUser = new Schema({
         type: String,
         unique: true,
     },
-    firstName: { type: String },
-    lastName: { type: String },
-    password: { type: String },
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
 });
 
 schemaUser.pre('save', function save(next) {
@@ -42,4 +51,4 @@ const user = mongoose.model('user', schemaUser);
 
 user.createIndexes({ email: 1 });
 
-module.exports = { user };
+module.exports = user;

@@ -1,5 +1,4 @@
 /* eslint-disable eol-last */
-/* eslint-disable consistent-return */
 const { Router } = require('express');
 
 const myComponent = require('./index');
