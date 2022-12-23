@@ -11,18 +11,9 @@ const schemaUser = new Schema({
         type: String,
         unique: true,
     },
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    password: {
-        type: String,
-        required: true,
-    },
+    firstName: { type: String },
+    lastName: { type: String },
+    password: { type: String },
 });
 
 schemaUser.pre('save', function save(next) {

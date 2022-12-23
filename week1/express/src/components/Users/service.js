@@ -1,19 +1,22 @@
 /* eslint-disable eol-last */
-const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
-const Users = require('./model');
+const UserModel = require('./model');
 
 dotenv.config();
 
 async function create(req) {
     try {
-        await Users.create({
+        const user = new UserModel({
             email: req.email,
             firstName: req.firstName,
             lastName: req.lastName,
             password: req.password,
+
         });
+
+        await user.save();
 
         return 'true';
     } catch (error) {
@@ -21,35 +24,23 @@ async function create(req) {
     }
 }
 
-async function getToken(line) {
-    const user = await Users.find((el) => (el.id === line.id && el.name === line.name));
+async function putUser(req, name) {
+    const user = await UserModel.findOne({ firstName: name });
 
-    if (user) {
-        const token1 = jwt.sign(line, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+    if (user.email) {
+        user.email = req.email;
+        user.firstName = req.firstName;
+        user.lastName = req.reqlastName;
+        user.password = req.password;
+        await user.save();
 
-        return token1;
-    }
-
-    return undefined;
-}
-
-async function putUser(user, name) {
-    const userPut = await Users.findOne({ firstName: name });
-
-    if (userPut.email) {
-        userPut.email = user.email;
-        userPut.firstName = user.firstName;
-        userPut.lastName = user.lastName;
-        userPut.password = user.password;
-        await userPut.save();
-
-        return userPut;
+        return user;
     }
 
     return 'not found user';
 }
 async function findUser(queryParam) {
-    const user = await Users.find({
+    const user = await UserModel.find({
         firstName: queryParam.name,
     });
 
@@ -63,7 +54,7 @@ async function findUser(queryParam) {
 }
 
 async function deleteUser(name) {
-    const user = await Users.deleteOne({ firstName: name });
+    const user = await UserModel.deleteOne({ firstName: name });
 
     if (user) return 'ok';
 
@@ -73,6 +64,5 @@ module.exports = {
     create,
     putUser,
     deleteUser,
-    getToken,
     findUser,
 };

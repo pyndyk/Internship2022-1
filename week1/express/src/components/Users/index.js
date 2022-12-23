@@ -74,20 +74,10 @@ async function deleteUser(req, res) {
         });
     }
 }
-async function getToken(req, res) {
-    if (req.body) {
-        const user = await myService.getToken(req.body);
-
-        return res.json({ token: `${user}` });
-    }
-
-    return res.json(' not data');
-}
 
 module.exports = {
     findUser,
     create,
     putUser,
     deleteUser,
-    getToken,
 };

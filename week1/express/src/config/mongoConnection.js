@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const mongoose = require('mongoose');
 
 const DB_URL = 'mongodb+srv://Iryna:2022scorpions@users.kvr04tr.mongodb.net/?retryWrites=true&w=majority';
