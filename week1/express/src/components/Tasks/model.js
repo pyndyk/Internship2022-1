@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const schemaTask = new Schema({
-    assignee: { type: String },
+    assignee: { type: mongoose.Types.ObjectId },
     title: { type: String },
     description: { type: String },
     estimatedTime: { type: Number },

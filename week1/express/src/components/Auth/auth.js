@@ -1,28 +1,44 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable eol-last */
 const jwt = require('jsonwebtoken');
-const Users = require('../Users/model');
+const bcrypt = require('bcrypt');
+const User = require('../Users/model');
 
-async function getToken(line) {
-    const user = await Users.find((el) => (el.id === line.id && el.name === line.name));
+require('dotenv').config();
 
-    if (user) {
-        const token1 = jwt.sign(line, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+async function generateAccessToken(req, res) {
+    const { userName, password } = req.body;
+    const user = await User.findOne({ firstName: userName });
 
-        return token1;
+    if (await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign({ user }, process.env.TOKEN_SECRET, { expiresIn: '180000s' });
+
+        return res.json({
+            jwt_token: token,
+        });
     }
 
-    return undefined;
+    return res.json('password is not valid');
 }
-async function userGetToken(req, res) {
-    if (req.body) {
-        const user = await getToken(req.body);
 
-        return res.json({ token: `${user}` });
+async function authenticateToken(req, res, next) {
+    try {
+        const token = await req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+        if (token == null) return res.sendStatus(401);
+        jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+            console.log(err);
+            if (err) return res.sendStatus(403);
+            req.user = user;
+        });
+
+        return next();
+    } catch (e) {
+        return res.status(401).send('Invalid Token');
     }
-
-    return res.json(' not data');
 }
 
 module.exports = {
-    userGetToken,
+    generateAccessToken,
+    authenticateToken,
 };

@@ -4,9 +4,8 @@ const { Router } = require('express');
 const myComponent = require('./auth');
 
 const router = Router();
-const verifyToken = require('../../config/verifyToken');
 
-router.post('/', myComponent.userGetToken);
-router.post('/account', verifyToken.authenticateToken, myComponent.userGetToken);
+router.post('/sing-in', myComponent.generateAccessToken);
+router.post('/account', myComponent.authenticateToken);
 
 module.exports = router;
