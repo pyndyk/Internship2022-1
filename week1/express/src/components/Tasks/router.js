@@ -2,7 +2,7 @@
 const { Router } = require('express');
 
 const router = Router();
-const taskComponent = require('./service');
+const taskComponent = require('./index');
 const userToken = require('../Auth/auth');
 
 router.post('/task', userToken.authenticateToken, taskComponent.create);

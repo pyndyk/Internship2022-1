@@ -1,3 +1,4 @@
+/* eslint-disable eol-last */
 const Joi = require('joi');
 
 const schema = Joi.object().keys({
