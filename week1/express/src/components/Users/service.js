@@ -1,5 +1,3 @@
-/* eslint-disable eol-last */
-
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 const UserModel = require('./model');

@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 const jwt = require('jsonwebtoken');
 
 async function authenticateToken(req, res, next) {

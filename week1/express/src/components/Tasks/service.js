@@ -1,6 +1,4 @@
-/* eslint-disable indent */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable eol-last */
 
 const TaskModel = require('./model');
 const UserModel = require('../Users/model');
@@ -21,9 +19,7 @@ async function getTasks(password) {
             { $sort: { 'tasks.estimatedTime': -1 } },
             {
                 $facet: {
-                    userName: [{
-                            $addFields: { userName: { $concat: ['$firstName', ' ', '$lastName'] } },
-                        },
+                    userName: [{ $addFields: { userName: { $concat: ['$firstName', ' ', '$lastName'] } } },
                         {
                             $group: {
                                 _id: null,
@@ -42,15 +38,13 @@ async function getTasks(password) {
                     total: [{
                         $count: 'value',
                     }],
-                    totalEstimatedTime: [{
-                            $group: { _id: null, totalEstimatedTime: { $sum: '$tasks.estimatedTime' } },
-                        },
+                    totalEstimatedTime: [{ $group: { _id: null, totalEstimatedTime: { $sum: '$tasks.estimatedTime' } } },
                         {
                             $project: {
                                 _id: 0,
                                 totalEstimatedTime: 1,
                             },
-                        }
+                        },
                     ],
                 },
             },
@@ -64,7 +58,7 @@ async function getTasks(password) {
 
 async function getTask(userId, page) {
     try {
-        const array = await TaskModel.find({ assignee: userId }).skip(page * 5).limit(5);
+        const array = (await TaskModel.find({ assignee: userId })).splice((page - 1) * 5, 5);
         const number = (await TaskModel.find({ assignee: userId })).length;
         const task = {
             array,
@@ -100,7 +94,7 @@ async function create(body, userId) {
             assignee: userId,
             title: body.title,
             description: body.description,
-            estimatedTime: body.date,
+            estimatedTime: body.estimatedTime,
             createdBy: body.createdBy,
         });
 

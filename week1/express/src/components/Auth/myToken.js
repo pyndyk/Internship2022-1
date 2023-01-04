@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 const { Router } = require('express');
 
 const myComponent = require('./auth');

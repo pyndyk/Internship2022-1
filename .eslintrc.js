@@ -9,6 +9,7 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
+        'eol-last': ['error', 'never'],
         'linebreak-style': ['error', 'windows'],
         indent: ['error', 4],
         'no-console': ['error', {

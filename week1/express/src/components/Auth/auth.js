@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable eol-last */
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../Users/model');
 
 require('dotenv').config();
 
+console.log(process.env.TOKEN_SECRET);
 async function generateAccessToken(req, res) {
     const { userName, password } = req.body;
     const user = await User.findOne({ firstName: userName });
@@ -27,7 +27,6 @@ async function authenticateToken(req, res, next) {
 
         if (token == null) return res.sendStatus(401);
         jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-            console.log(err);
             if (err) return res.sendStatus(403);
             req.user = user;
         });

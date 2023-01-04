@@ -1,0 +1,181 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "My User Project CRUD",
+        "description": "My User Project Application API"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "tags": [{
+        "name": "Tasks",
+        "description": "API for tasks in the system"
+    }],
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+
+    "paths": {
+        "/v1/task": {
+            "get": {
+                "tags": ["Task"],
+                "summary": "Get 5 tasks for user by page",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Tasks",
+                            "totalTasks": "#/definitions/totalTasks"
+                        }
+                    },
+                    "404": {
+                        "description": "error"
+                    }
+                },
+                "parameters": [{
+                        "name": "page",
+                        "in": "query",
+                        "description": "tasks for which page do we want to enter",
+                        "type": "number"
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    }
+                ]
+            },
+
+            "post": {
+                "tags": ["Task"],
+                "summary": "Create task for user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    },
+                    "404": {
+                        "description": "error"
+                    }
+                },
+                "parameters": [{
+                        "name": "task",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        },
+                        "required": true
+                    },
+                    {
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/v1/task/:id": {
+            "patch": {
+                "tags": ["estimatedTime"],
+                "summary": "Change estitamatedTime for user by id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Task"
+                        }
+                    },
+                    "404": {
+                        "description": "error"
+                    }
+                },
+                "parameters": [{
+                        "name": "authorization",
+                        "in": "header",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "estimatedTime",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/addressRequest"
+                        },
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/v1/tasks/all": {
+            "get": {
+                "tags": ["tasks"],
+                "summary": "Get tasks for user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Tasks"
+                        }
+                    },
+                    "404": {
+                        "description": "error"
+                    }
+                },
+                "parameters": [{
+                    "name": "authorization",
+                    "in": "header",
+                    "type": "string",
+                    "required": true
+                }]
+            }
+        }
+    },
+    "definitions": {
+        "Task": {
+            "type": "object",
+            "required": ["assignee", " title", "description", " estimatedTime", " createdBy"],
+            "properties": {
+                "assignee": {
+                    "type": "string",
+                    "uniqueItems": true
+                },
+                "title": {
+                    "type": "string"
+                },
+                "estimatedTime": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "createdBy": {
+                    "type": "string"
+                }
+            }
+        },
+        "Tasks": {
+            "type": "array",
+            "$ref": "#/definitions/Task"
+        },
+        "totalTasks": {
+            "type": "number"
+        },
+        "addressRequest": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "id"
+                },
+                "date": {
+                    "type": "number",
+                    "title": "date"
+                }
+            }
+        }
+    }
+}

@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 /* eslint-disable operator-linebreak */
 const bodyParser = require('body-parser');
 const morgan = require('morgan');

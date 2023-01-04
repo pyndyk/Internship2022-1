@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 const url = require('url');
 
 const validation = require('./validation');
@@ -11,7 +10,6 @@ async function validationReqBody(req, res, next) {
     const { error } = result;
     const valid = error == null;
 
-    console.log(valid);
     if (valid) return next();
 
     return res.status(400).send(error.details[0].message);
