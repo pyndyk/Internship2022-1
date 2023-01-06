@@ -5,15 +5,14 @@ const User = require('../Users/model');
 
 require('dotenv').config();
 
-console.log(process.env.TOKEN_SECRET);
 async function generateAccessToken(req, res) {
     const { userName, password } = req.body;
     const user = await User.findOne({ firstName: userName });
 
     if (await bcrypt.compare(password, user.password)) {
-        const token = jwt.sign({ user }, process.env.TOKEN_SECRET, { expiresIn: '180000s' });
+        const token = jwt.sign({ password: user.password }, 'jfjfjfjfjfjfjfuuuuu', { expiresIn: '180000s' });
 
-        return res.json({
+        return res.status(200).json({
             jwt_token: token,
         });
     }
@@ -26,9 +25,9 @@ async function authenticateToken(req, res, next) {
         const token = await req.headers.authorization && req.headers.authorization.split(' ')[1];
 
         if (token == null) return res.sendStatus(401);
-        jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+        jwt.verify(token, 'jfjfjfjfjfjfjfuuuuu', (err, user) => {
             if (err) return res.sendStatus(403);
-            req.user = user;
+            req.password = user.password;
         });
 
         return next();

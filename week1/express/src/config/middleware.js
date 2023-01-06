@@ -4,9 +4,6 @@ const morgan = require('morgan');
 
 module.exports = {
     init(app) {
-        /**
-         * BODY PARSER
-         */
         app.use(morgan('tiny'));
         app.use(bodyParser.urlencoded({ extended: true }));
         app.use(bodyParser.json());

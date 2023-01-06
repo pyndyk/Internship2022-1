@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const DB_URL = 'mongodb+srv://Iryna:2022scorpions@users.kvr04tr.mongodb.net/?retryWrites=true&w=majority';
 
 async function start() {
+    await mongoose.set('strictQuery', false);
     await mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 
     const db = await mongoose.connection;

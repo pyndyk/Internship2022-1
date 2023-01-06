@@ -1,4 +1,3 @@
-/* eslint-disable eol-last */
 const url = require('url');
 
 const myService = require('./service');

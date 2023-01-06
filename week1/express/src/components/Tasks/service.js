@@ -1,12 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 
+const dotenv = require('dotenv');
+
+dotenv.config();
 const TaskModel = require('./model');
 const UserModel = require('../Users/model');
 
 async function getTasks(password) {
     try {
-        const task = await UserModel.aggregate([
-            { $match: { password } },
+        const task = await UserModel.aggregate([{ $match: { password } },
             {
                 $lookup: {
                     from: 'tasks',
@@ -15,37 +17,33 @@ async function getTasks(password) {
                     as: 'tasks',
                 },
             },
-            { $unwind: '$tasks' },
-            { $sort: { 'tasks.estimatedTime': -1 } },
             {
-                $facet: {
-                    userName: [{ $addFields: { userName: { $concat: ['$firstName', ' ', '$lastName'] } } },
-                        {
-                            $group: {
-                                _id: null,
-                                userName: { $first: '$userName' },
-                            },
+                $unwind: '$tasks',
+            },
+            {
+                $sort: { 'tasks.estimatedTime': -1 },
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    firstName: { $first: '$firstName' },
+                    lastName: { $first: '$lastName' },
+                    tasks: { $push: '$tasks' },
+                },
+            },
+            {
+                $project: {
+                    name: {
+                        $concat: ['$firstName', ' ', '$lastName'],
+                    },
+                    totalTasks: { $size: '$tasks' },
+                    totalEstimation: {
+                        $sum: {
+                            $sum: '$tasks.estimatedTime',
                         },
-                        { $project: { userName: 1, _id: 0 } },
-                    ],
-                    tasks: [{
-                        $project: {
-                            tasks: 1,
-                            _id: 0,
-                        },
-
-                    }],
-                    total: [{
-                        $count: 'value',
-                    }],
-                    totalEstimatedTime: [{ $group: { _id: null, totalEstimatedTime: { $sum: '$tasks.estimatedTime' } } },
-                        {
-                            $project: {
-                                _id: 0,
-                                totalEstimatedTime: 1,
-                            },
-                        },
-                    ],
+                    },
+                    tasks: 1,
+                    _id: 0,
                 },
             },
         ]);
@@ -56,10 +54,12 @@ async function getTasks(password) {
     }
 }
 
-async function getTask(userId, page) {
+async function getTask(password, page) {
     try {
-        const array = (await TaskModel.find({ assignee: userId })).splice((page - 1) * 5, 5);
-        const number = (await TaskModel.find({ assignee: userId })).length;
+        const user = await UserModel.find({ password });
+
+        const array = (await TaskModel.find({ assignee: user._id })).splice((page - 1) * 5, 5);
+        const number = (await TaskModel.find({ assignee: user._id })).length;
         const task = {
             array,
             number,
@@ -71,9 +71,10 @@ async function getTask(userId, page) {
     }
 }
 
-async function patch(userId, id, date) {
+async function patch(password, id, date) {
     try {
-        const task = await TaskModel.findOne({ assgnee: userId, _id: id });
+        const user = await UserModel.findOne({ password });
+        const task = await TaskModel.findOne({ assignee: user._id, _id: id });
 
         if (task && date) {
             task.estimatedTime = date;
@@ -88,10 +89,11 @@ async function patch(userId, id, date) {
     }
 }
 
-async function create(body, userId) {
+async function create(body, password) {
     try {
+        const user = await UserModel.findOne({ password });
         const task = new TaskModel({
-            assignee: userId,
+            assignee: user._id,
             title: body.title,
             description: body.description,
             estimatedTime: body.estimatedTime,

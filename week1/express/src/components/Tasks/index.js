@@ -3,13 +3,12 @@ const myService = require('./service');
 
 async function getTask(req, res) {
     try {
-        const task = await myService.getTask(req.user.user._id, req.query.page);
+        const task = await myService.getTask(req.password, req.query.page);
 
-        return res.send(JSON.stringify({
-            code: 200,
+        return res.status(200).json({
             task: task.array,
             totalTasks: task.number,
-        }));
+        });
     } catch (error) {
         return res.json(error);
     }
@@ -17,7 +16,7 @@ async function getTask(req, res) {
 
 async function getTasks(req, res) {
     try {
-        const task = await myService.getTasks(req.user.user.password);
+        const task = await myService.getTasks(req.password);
 
         return res.status(200).json(task);
     } catch (error) {
@@ -27,7 +26,7 @@ async function getTasks(req, res) {
 
 async function patch(req, res) {
     try {
-        const task = await myService.patch(req.user.user._id, req.body.id, req.body.date);
+        const task = await myService.patch(req.password, req.body._id, req.body.date);
 
         if (task) return res.status(200).json(task);
 
@@ -38,11 +37,16 @@ async function patch(req, res) {
 }
 
 async function create(req, res) {
-    const task = await myService.create(req.body, req.user.user._id);
+    try {
+        const task = await myService.create(req.body, req.password);
 
-    return res.json(task);
+        if (task !== 'error') return res.status(200).send(task);
+
+        return res.status(404).json('error');
+    } catch (error) {
+        return res.status(500).json('error');
+    }
 }
-
 module.exports = {
     getTask,
     getTasks,
